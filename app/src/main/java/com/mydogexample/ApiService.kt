@@ -1,14 +1,12 @@
 package com.mydogexample
 
-import okhttp3.MediaType
-import okhttp3.MultipartBody
-import okhttp3.RequestBody
-import retrofit2.Call
-import retrofit2.http.*
+import retrofit2.Response
+import retrofit2.http.GET
+import retrofit2.http.Url
 
-interface APIService {
+interface ApiService {
     @GET
-    fun getCharacterByName(@Url url: String): Call<DogsResponse>
+    suspend fun getCharacterByName(@Url url: String): Response<DogsResponse>
 
 /*    @GET("/example/example2/{id}/loquesea")
     fun getCharacterByName2(@Path("id") id: String): Call<DogsResponse>

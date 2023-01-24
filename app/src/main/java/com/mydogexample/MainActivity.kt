@@ -6,12 +6,14 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mydogexample.databinding.ActivityMainBinding
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity(), androidx.appcompat.widget.SearchView.OnQueryTextListener {
 
     private lateinit var imagesPuppies: List<String>
@@ -23,6 +25,7 @@ class MainActivity : AppCompatActivity(), androidx.appcompat.widget.SearchView.O
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
         binding.searchBreed.setOnQueryTextListener(this)
     }
 
@@ -50,9 +53,7 @@ class MainActivity : AppCompatActivity(), androidx.appcompat.widget.SearchView.O
 
     private fun searchByName(query: String) {
         CoroutineScope(Dispatchers.IO).launch {
-            val call =
-                getRetrofit().create(APIService::class.java).getCharacterByName("$query/images")
-                    .execute()
+            val call = getRetrofit().create(ApiService::class.java).getCharacterByName("$query/images")
             val puppies = call.body()   //as DogsResponse?
             runOnUiThread {
                 if (puppies?.status == "success") {
