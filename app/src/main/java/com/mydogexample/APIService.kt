@@ -10,7 +10,7 @@ interface APIService {
     @GET
     fun getCharacterByName(@Url url: String): Call<DogsResponse>
 
-    @GET("/example/example2/{id}/loquesea")
+/*    @GET("/example/example2/{id}/loquesea")
     fun getCharacterByName2(@Path("id") id: String): Call<DogsResponse>
 
     @GET("/example/example2/v2/loquesea")
@@ -28,10 +28,10 @@ interface APIService {
     fun getEVERYTHING2(
         @Part image: MultipartBody.Part,
         @Part("example") myExample: String
-    ): Call<*>
+    ): Call<*>*/
 
 //    val requestBody =   RequestBody.create(MediaType.parse(getContentResolver().getType(fileUri)), file);
 //    val a = MultipartBody.Part.createFormData("picture", file.getName(), requestBody);
 }
 
-data class ExampleArisDto(val name: String, val age: Int)
+//data class ExampleArisDto(val name: String, val age: Int)

@@ -1,22 +1,21 @@
 package com.mydogexample
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mydogexample.databinding.ActivityMainBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 class MainActivity : AppCompatActivity(), androidx.appcompat.widget.SearchView.OnQueryTextListener {
 
-    lateinit var imagesPuppies: List<String>
-    lateinit var dogsAdapter: DogsAdapter
+    private lateinit var imagesPuppies: List<String>
+    private lateinit var dogsAdapter: DogsAdapter
 
     private lateinit var binding: ActivityMainBinding
 
@@ -45,7 +44,7 @@ class MainActivity : AppCompatActivity(), androidx.appcompat.widget.SearchView.O
     }
 
     override fun onQueryTextSubmit(query: String): Boolean {
-        searchByName(query.toLowerCase())
+        searchByName(query.lowercase())
         return true
     }
 
@@ -54,7 +53,7 @@ class MainActivity : AppCompatActivity(), androidx.appcompat.widget.SearchView.O
             val call =
                 getRetrofit().create(APIService::class.java).getCharacterByName("$query/images")
                     .execute()
-            val puppies = call.body() as DogsResponse?
+            val puppies = call.body()   //as DogsResponse?
             runOnUiThread {
                 if (puppies?.status == "success") {
                     initCharacter(puppies)

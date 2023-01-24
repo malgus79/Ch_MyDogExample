@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.mydogexample.databinding.ItemDogBinding
 
-class DogsAdapter(val images: List<String>) : RecyclerView.Adapter<DogsAdapter.ViewHolder>() {
+class DogsAdapter(private val images: List<String>) : RecyclerView.Adapter<DogsAdapter.ViewHolder>() {
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = images[position]
