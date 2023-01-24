@@ -3,9 +3,14 @@ package com.mydogexample
 import android.os.Bundle
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.mydogexample.core.Resource
 import com.mydogexample.databinding.ActivityMainBinding
+import com.mydogexample.viewmodel.MainActivityViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -20,6 +25,7 @@ class MainActivity : AppCompatActivity(), androidx.appcompat.widget.SearchView.O
     private lateinit var dogsAdapter: DogsAdapter
 
     private lateinit var binding: ActivityMainBinding
+    private val viewModel: MainActivityViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,12 +45,12 @@ class MainActivity : AppCompatActivity(), androidx.appcompat.widget.SearchView.O
         binding.rvDogs.adapter = dogsAdapter
     }
 
-    private fun getRetrofit(): Retrofit {
-        return Retrofit.Builder()
-            .baseUrl("https://dog.ceo/api/breed/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-    }
+//    private fun getRetrofit(): Retrofit {
+//        return Retrofit.Builder()
+//            .baseUrl("https://dog.ceo/api/breed/")
+//            .addConverterFactory(GsonConverterFactory.create())
+//            .build()
+//    }
 
     override fun onQueryTextSubmit(query: String): Boolean {
         searchByName(query.lowercase())
@@ -52,18 +58,35 @@ class MainActivity : AppCompatActivity(), androidx.appcompat.widget.SearchView.O
     }
 
     private fun searchByName(query: String) {
-        CoroutineScope(Dispatchers.IO).launch {
-            val call = getRetrofit().create(ApiService::class.java).getCharacterByName("$query/images")
-            val puppies = call.body()   //as DogsResponse?
-            runOnUiThread {
-                if (puppies?.status == "success") {
-                    initCharacter(puppies)
-                } else {
+        viewModel.fetchDogByBreed(query).observe(this, Observer {
+            when(it) {
+                Resource.Loading -> {
+                    binding.progressBar.isVisible = true
+                }
+                is Resource.Success -> {
+                    binding.progressBar.isVisible = false
+                        initCharacter(it.data)
+                }
+                is Resource.Failure -> {
+                    binding.progressBar.isVisible = false
                     showErrorDialog()
                 }
-                hideKeyboard()
             }
-        }
+            hideKeyboard()
+        })
+
+//        CoroutineScope(Dispatchers.IO).launch {
+//            val call = getRetrofit().create(ApiService::class.java).getCharacterByName("$query/images")
+//            val puppies = call.body()   //as DogsResponse?
+//            runOnUiThread {
+//                if (puppies?.status == "success") {
+//                    initCharacter(puppies)
+//                } else {
+//                    showErrorDialog()
+//                }
+//                hideKeyboard()
+//            }
+//        }
     }
 
     private fun showErrorDialog() {
