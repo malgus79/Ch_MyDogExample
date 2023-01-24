@@ -1,6 +1,7 @@
 package com.mydogexample
 
 import android.os.Bundle
+import android.util.Log
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -12,11 +13,6 @@ import com.mydogexample.core.Resource
 import com.mydogexample.databinding.ActivityMainBinding
 import com.mydogexample.viewmodel.MainActivityViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(), androidx.appcompat.widget.SearchView.OnQueryTextListener {
@@ -35,16 +31,6 @@ class MainActivity : AppCompatActivity(), androidx.appcompat.widget.SearchView.O
         binding.searchBreed.setOnQueryTextListener(this)
     }
 
-    private fun initCharacter(puppies: DogsResponse) {
-        if (puppies.status == "success") {
-            imagesPuppies = puppies.images
-        }
-        dogsAdapter = DogsAdapter(imagesPuppies)
-        binding.rvDogs.setHasFixedSize(true)
-        binding.rvDogs.layoutManager = LinearLayoutManager(this)
-        binding.rvDogs.adapter = dogsAdapter
-    }
-
 //    private fun getRetrofit(): Retrofit {
 //        return Retrofit.Builder()
 //            .baseUrl("https://dog.ceo/api/breed/")
@@ -54,20 +40,26 @@ class MainActivity : AppCompatActivity(), androidx.appcompat.widget.SearchView.O
 
     override fun onQueryTextSubmit(query: String): Boolean {
         searchByName(query.lowercase())
+        if (query.isNotEmpty()) {
+            viewModel.setCharacterSearched(query)
+        }
         return true
     }
 
     private fun searchByName(query: String) {
         viewModel.fetchDogByBreed(query).observe(this, Observer {
-            when(it) {
+            when (it) {
                 Resource.Loading -> {
+                    Log.d("STATUSSSSS", "Loading")
                     binding.progressBar.isVisible = true
                 }
                 is Resource.Success -> {
+                    Log.d("STATUSSSSS", "Success")
                     binding.progressBar.isVisible = false
-                        initCharacter(it.data)
+                    initCharacter(it.data)
                 }
                 is Resource.Failure -> {
+                    Log.d("STATUSSSSS", "Failure")
                     binding.progressBar.isVisible = false
                     showErrorDialog()
                 }
@@ -75,18 +67,28 @@ class MainActivity : AppCompatActivity(), androidx.appcompat.widget.SearchView.O
             hideKeyboard()
         })
 
-//        CoroutineScope(Dispatchers.IO).launch {
-//            val call = getRetrofit().create(ApiService::class.java).getCharacterByName("$query/images")
-//            val puppies = call.body()   //as DogsResponse?
-//            runOnUiThread {
-//                if (puppies?.status == "success") {
-//                    initCharacter(puppies)
-//                } else {
-//                    showErrorDialog()
-//                }
-//                hideKeyboard()
-//            }
-//        }
+/*        CoroutineScope(Dispatchers.IO).launch {
+            val call = getRetrofit().create(ApiService::class.java).getCharacterByName("$query/images")
+            val puppies = call.body()   //as DogsResponse?
+            runOnUiThread {
+                if (puppies?.status == "success") {
+                    initCharacter(puppies)
+                } else {
+                    showErrorDialog()
+                }
+                hideKeyboard()
+            }
+        }*/
+    }
+
+    private fun initCharacter(puppies: DogsResponse) {
+        if (puppies.status == "success") {
+            imagesPuppies = puppies.images
+        }
+        dogsAdapter = DogsAdapter(imagesPuppies)
+        binding.rvDogs.setHasFixedSize(true)
+        binding.rvDogs.layoutManager = LinearLayoutManager(this)
+        binding.rvDogs.adapter = dogsAdapter
     }
 
     private fun showErrorDialog() {
