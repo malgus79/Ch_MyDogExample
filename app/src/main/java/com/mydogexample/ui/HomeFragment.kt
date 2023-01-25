@@ -53,7 +53,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     }
 
     private fun searchByName(query: String) {
-        viewModel.fetchDogByBreed(query).observe(this) {
+        viewModel.fetchDogByBreed(query).observe(viewLifecycleOwner) {
             when (it) {
                 Resource.Loading -> {
                     Log.d("STATUSSSSS", "Loading")
