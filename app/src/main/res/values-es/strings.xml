@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Razas de perros</string>
+    <string name="search_no_found">No se encontraron imágenes</string>
+    <string name="error_ocurred">Se ha producido un error</string>
+    <string name="no_images">"No se encontraron imágenes para: "</string>
+</resources>
