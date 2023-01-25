@@ -16,6 +16,19 @@ class MainActivityViewModel @Inject constructor(private val repository: Reposito
         mutableCharacterSearched.value = queryCharacter
     }
 
+    fun fetchDogByBreed(query: String) =
+        liveData(viewModelScope.coroutineContext + Dispatchers.IO) {
+            emit(Resource.Loading)
+            try {
+                emit(Resource.Success(repository.getCharacterByName("$query/images")))
+            } catch (e: Exception) {
+                emit(Resource.Failure(e))
+            }
+        }
+}
+
+/*
+
 //    val fetchDogByBreed2 = mutableCharacterSearched.distinctUntilChanged().switchMap {
 //        liveData(viewModelScope.coroutineContext + Dispatchers.IO) {
 //            emit(Resource.Loading)
@@ -27,27 +40,13 @@ class MainActivityViewModel @Inject constructor(private val repository: Reposito
 //        }
 //    }
 
-    val fetchDogByBreed1 = mutableCharacterSearched.distinctUntilChanged().switchMap {
-        liveData(viewModelScope.coroutineContext + Dispatchers.IO) {
-            emit(Resource.Loading)
-            try {
-                repository.getCharacterByName("$mutableCharacterSearched/images")
-            } catch (e: Exception) {
-                emit(Resource.Failure(e))
-            }
-        }
-    }
-
-
-
-
-    fun fetchDogByBreed(query: String) =
-        liveData(viewModelScope.coroutineContext + Dispatchers.IO) {
-            emit(Resource.Loading)
-            try {
-                emit(Resource.Success(repository.getCharacterByName("$query/images")!!))
-            } catch (e: Exception) {
-                emit(Resource.Failure(e))
-            }
-        }
-}
+//    val fetchDogByBreed1 = mutableCharacterSearched.distinctUntilChanged().switchMap {
+//        liveData(viewModelScope.coroutineContext + Dispatchers.IO) {
+//            emit(Resource.Loading)
+//            try {
+//                repository.getCharacterByName("$mutableCharacterSearched/images")
+//            } catch (e: Exception) {
+//                emit(Resource.Failure(e))
+//            }
+//        }
+//    }*/
