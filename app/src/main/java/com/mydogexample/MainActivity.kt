@@ -1,5 +1,6 @@
 package com.mydogexample
 
+import android.content.ContentValues.TAG
 import android.os.Bundle
 import android.util.Log
 import android.view.inputmethod.InputMethodManager
@@ -34,10 +35,11 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupBtnSearch() {
         binding.searchBreed.setOnQueryTextListener(object : OnQueryTextListener {
+
             override fun onQueryTextSubmit(query: String?): Boolean {
-                searchByName(query!!.lowercase())
-                if (query.isNotEmpty()) {
+                if (!query.isNullOrEmpty()) {
                     viewModel.setCharacterSearched(query)
+                    searchByName(query.lowercase())
                 }
                 return true
             }
@@ -58,10 +60,15 @@ class MainActivity : AppCompatActivity() {
                 is Resource.Success -> {
                     Log.d("STATUSSSSS", "Success")
                     binding.progressBar.isVisible = false
+                    if (it.data.images.isEmpty()) {
+                        //binding.rvDogs.isVisible = false
+                        showEmptyList(query)
+                        return@observe
+                    }
                     initCharacter(it.data)
                 }
                 is Resource.Failure -> {
-                    Log.d("STATUSSSSS", "Failure")
+                    Log.d(TAG, "STATUSSSSS: " + it.exception)
                     binding.progressBar.isVisible = false
                     showErrorDialog()
                 }
@@ -82,6 +89,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun showErrorDialog() {
         Toast.makeText(this, "Ha ocurrido un error", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun showEmptyList(query: String) {
+        Toast.makeText(this, "No se encontraron imagenes de: \"$query\"", Toast.LENGTH_SHORT).show()
     }
 
     private fun hideKeyboard() {
