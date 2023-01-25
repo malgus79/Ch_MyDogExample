@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,6 +13,7 @@ import com.mydogexample.core.Resource
 import com.mydogexample.core.common.hide
 import com.mydogexample.core.common.hideKeyboard
 import com.mydogexample.core.common.show
+import com.mydogexample.core.common.showToast
 import com.mydogexample.databinding.FragmentHomeBinding
 import com.mydogexample.model.data.DogsResponse
 import com.mydogexample.ui.adapter.DogsAdapter
@@ -56,30 +56,31 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private fun searchByName(query: String) {
         viewModel.fetchDogByBreed(query).observe(viewLifecycleOwner) {
-            when (it) {
-                Resource.Loading -> {
-                    Log.d("STATUSSSSS", "Loading")
-                    binding.emptyContainer.root.hide()
-                    binding.progressBar.show()
-                }
-                is Resource.Success -> {
-                    Log.d("STATUSSSSS", "Success")
-                    binding.progressBar.hide()
-                    if (it.data.images.isEmpty()) {
-                        binding.rvDogs.hide()
-                        binding.emptyContainer.root.show()
-                        showEmptyList(query)
-                        return@observe
+            with(binding) {
+                when (it) {
+                    Resource.Loading -> {
+                        Log.d("STATUSSSSS", "Loading")
+                        emptyContainer.root.hide()
+                        progressBar.show()
                     }
-                    initCharacter(it.data)
+                    is Resource.Success -> {
+                        Log.d("STATUSSSSS", "Success")
+                        progressBar.hide()
+                        if (it.data.images.isEmpty()) {
+                            emptyContainer.root.show()
+                            showToast(getString(R.string.no_images) + query)
+                            return@observe
+                        }
+                        initCharacter(it.data)
+                    }
+                    is Resource.Failure -> {
+                        Log.d("STATUSSSSS", "${it.exception}")
+                        progressBar.hide()
+                        showToast(getString(R.string.error_ocurred))
+                    }
                 }
-                is Resource.Failure -> {
-                    Log.d("STATUSSSSS", "${it.exception}")
-                    binding.progressBar.hide()
-                    showErrorDialog()
-                }
+                root.hideKeyboard()
             }
-            binding.root.hideKeyboard()
         }
     }
 
@@ -88,10 +89,13 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             imagesPuppies = puppies.images
         }
         dogsAdapter = DogsAdapter(imagesPuppies)
-        binding.rvDogs.adapter = dogsAdapter
-        binding.rvDogs.layoutManager = LinearLayoutManager(requireContext())
-        binding.rvDogs.setHasFixedSize(true)
-        binding.rvDogs.show()
+
+        binding.rvDogs.apply {
+            adapter = dogsAdapter
+            layoutManager = LinearLayoutManager(requireContext())
+            setHasFixedSize(true)
+            show()
+        }
     }
 
     private fun showErrorDialog() {

@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">MyDogExample</string>
     <string name="search_no_found">No images found</string>
+    <string name="error_ocurred">An error has occurred</string>
+    <string name="no_images">"No images found for: "</string>
 </resources>
