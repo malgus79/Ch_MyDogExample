@@ -97,13 +97,4 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             show()
         }
     }
-
-    private fun showErrorDialog() {
-        Toast.makeText(requireContext(), "Ha ocurrido un error", Toast.LENGTH_SHORT).show()
-    }
-
-    private fun showEmptyList(query: String) {
-        Toast.makeText(requireContext(), "No se encontraron imagenes de: \"$query\"", Toast.LENGTH_SHORT).show()
-    }
-
 }
