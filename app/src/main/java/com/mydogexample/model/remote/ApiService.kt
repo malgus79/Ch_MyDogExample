@@ -7,7 +7,7 @@ import retrofit2.http.Url
 
 interface ApiService {
     @GET
-    suspend fun getCharacterByName(@Url url: String): Response<DogsResponse>
+    suspend fun getCharacterByName(@Url url: String): DogsResponse
 
 /*    @GET("/example/example2/{id}/loquesea")
     fun getCharacterByName2(@Path("id") id: String): Call<DogsResponse>
