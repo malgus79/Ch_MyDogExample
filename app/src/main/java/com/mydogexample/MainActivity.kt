@@ -1,6 +1,5 @@
 package com.mydogexample
 
-import android.content.ContentValues.TAG
 import android.os.Bundle
 import android.util.Log
 import android.view.inputmethod.InputMethodManager
@@ -68,7 +67,7 @@ class MainActivity : AppCompatActivity() {
                     initCharacter(it.data)
                 }
                 is Resource.Failure -> {
-                    Log.d(TAG, "STATUSSSSS: " + it.exception)
+                    Log.d("STATUSSSSS", "${it.exception}")
                     binding.progressBar.isVisible = false
                     showErrorDialog()
                 }
