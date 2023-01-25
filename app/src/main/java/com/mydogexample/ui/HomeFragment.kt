@@ -11,7 +11,9 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mydogexample.R
 import com.mydogexample.core.Resource
+import com.mydogexample.core.common.hide
 import com.mydogexample.core.common.hideKeyboard
+import com.mydogexample.core.common.show
 import com.mydogexample.databinding.FragmentHomeBinding
 import com.mydogexample.model.data.DogsResponse
 import com.mydogexample.ui.adapter.DogsAdapter
@@ -57,13 +59,15 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             when (it) {
                 Resource.Loading -> {
                     Log.d("STATUSSSSS", "Loading")
-                    binding.progressBar.isVisible = true
+                    binding.emptyContainer.root.hide()
+                    binding.progressBar.show()
                 }
                 is Resource.Success -> {
                     Log.d("STATUSSSSS", "Success")
-                    binding.progressBar.isVisible = false
+                    binding.progressBar.hide()
                     if (it.data.images.isEmpty()) {
-                        //binding.rvDogs.isVisible = false
+                        binding.rvDogs.hide()
+                        binding.emptyContainer.root.show()
                         showEmptyList(query)
                         return@observe
                     }
@@ -71,7 +75,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 }
                 is Resource.Failure -> {
                     Log.d("STATUSSSSS", "${it.exception}")
-                    binding.progressBar.isVisible = false
+                    binding.progressBar.hide()
                     showErrorDialog()
                 }
             }
@@ -84,9 +88,10 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             imagesPuppies = puppies.images
         }
         dogsAdapter = DogsAdapter(imagesPuppies)
-        binding.rvDogs.setHasFixedSize(true)
-        binding.rvDogs.layoutManager = LinearLayoutManager(requireContext())
         binding.rvDogs.adapter = dogsAdapter
+        binding.rvDogs.layoutManager = LinearLayoutManager(requireContext())
+        binding.rvDogs.setHasFixedSize(true)
+        binding.rvDogs.show()
     }
 
     private fun showErrorDialog() {

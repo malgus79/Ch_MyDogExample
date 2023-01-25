@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="text_size_normal">20sp</dimen>
+    <dimen name="error_image_size">50dp</dimen>
+    <dimen name="common_margin_default">16dp</dimen>
+    <dimen name="common_margin_max">64dp</dimen>
+</resources>
