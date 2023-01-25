@@ -67,6 +67,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                         Log.d("STATUSSSSS", "Success")
                         progressBar.hide()
                         if (it.data.images.isEmpty()) {
+                            rvDogs.hide()
                             emptyContainer.root.show()
                             showToast(getString(R.string.no_images) + query)
                             return@observe
