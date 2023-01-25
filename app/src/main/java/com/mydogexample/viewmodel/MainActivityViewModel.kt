@@ -27,12 +27,11 @@ class MainActivityViewModel @Inject constructor(private val repository: Reposito
 //        }
 //    }
 
-    fun fetchDogByBreed1(query: String) = mutableCharacterSearched.distinctUntilChanged().switchMap {
+    val fetchDogByBreed1 = mutableCharacterSearched.distinctUntilChanged().switchMap {
         liveData(viewModelScope.coroutineContext + Dispatchers.IO) {
             emit(Resource.Loading)
             try {
-                emit(repository.getCharacterByName("$query/images")
-                    ?.let { it1 -> Resource.Success(it1) })
+                repository.getCharacterByName("$mutableCharacterSearched/images")
             } catch (e: Exception) {
                 emit(Resource.Failure(e))
             }

@@ -7,7 +7,6 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mydogexample.core.Resource
 import com.mydogexample.databinding.ActivityMainBinding
@@ -31,13 +30,6 @@ class MainActivity : AppCompatActivity(), androidx.appcompat.widget.SearchView.O
         binding.searchBreed.setOnQueryTextListener(this)
     }
 
-//    private fun getRetrofit(): Retrofit {
-//        return Retrofit.Builder()
-//            .baseUrl("https://dog.ceo/api/breed/")
-//            .addConverterFactory(GsonConverterFactory.create())
-//            .build()
-//    }
-
     override fun onQueryTextSubmit(query: String): Boolean {
         searchByName(query.lowercase())
         if (query.isNotEmpty()) {
@@ -47,7 +39,7 @@ class MainActivity : AppCompatActivity(), androidx.appcompat.widget.SearchView.O
     }
 
     private fun searchByName(query: String) {
-        viewModel.fetchDogByBreed(query).observe(this, Observer {
+        viewModel.fetchDogByBreed(query).observe(this) {
             when (it) {
                 Resource.Loading -> {
                     Log.d("STATUSSSSS", "Loading")
@@ -65,20 +57,7 @@ class MainActivity : AppCompatActivity(), androidx.appcompat.widget.SearchView.O
                 }
             }
             hideKeyboard()
-        })
-
-/*        CoroutineScope(Dispatchers.IO).launch {
-            val call = getRetrofit().create(ApiService::class.java).getCharacterByName("$query/images")
-            val puppies = call.body()   //as DogsResponse?
-            runOnUiThread {
-                if (puppies?.status == "success") {
-                    initCharacter(puppies)
-                } else {
-                    showErrorDialog()
-                }
-                hideKeyboard()
-            }
-        }*/
+        }
     }
 
     private fun initCharacter(puppies: DogsResponse) {
