@@ -1,7 +1,7 @@
 package com.mydogexample.di
 
-import com.mydogexample.ApiService
-import com.mydogexample.core.Constants.BASE_URL
+import com.mydogexample.model.remote.ApiService
+import com.mydogexample.core.common.Constants.BASE_URL
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

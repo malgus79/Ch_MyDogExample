@@ -1,7 +1,7 @@
 package com.mydogexample.domain
 
-import com.mydogexample.ApiService
-import com.mydogexample.DogsResponse
+import com.mydogexample.model.remote.ApiService
+import com.mydogexample.model.data.DogsResponse
 import javax.inject.Inject
 
 class Repository @Inject constructor(private val apiService: ApiService) {

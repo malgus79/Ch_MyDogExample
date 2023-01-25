@@ -1,6 +1,6 @@
 package com.mydogexample.core
 
-import com.mydogexample.DogsResponse
+import com.mydogexample.model.data.DogsResponse
 
 sealed class Resource<out T>() {
     object Loading : Resource<Nothing>()

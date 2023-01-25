@@ -1,4 +1,4 @@
-package com.mydogexample
+package com.mydogexample.model.data
 
 import com.google.gson.annotations.SerializedName
 

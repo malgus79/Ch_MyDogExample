@@ -1,4 +1,4 @@
-package com.mydogexample
+package com.mydogexample.ui
 
 import android.os.Bundle
 import android.util.Log
@@ -9,6 +9,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView.OnQueryTextListener
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.mydogexample.ui.adapter.DogsAdapter
+import com.mydogexample.model.data.DogsResponse
 import com.mydogexample.core.Resource
 import com.mydogexample.databinding.ActivityMainBinding
 import com.mydogexample.viewmodel.MainActivityViewModel

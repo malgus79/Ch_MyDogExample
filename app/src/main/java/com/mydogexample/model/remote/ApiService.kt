@@ -1,5 +1,6 @@
-package com.mydogexample
+package com.mydogexample.model.remote
 
+import com.mydogexample.model.data.DogsResponse
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Url
