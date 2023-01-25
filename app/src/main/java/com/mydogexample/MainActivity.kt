@@ -6,6 +6,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView.OnQueryTextListener
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mydogexample.core.Resource
@@ -14,7 +15,7 @@ import com.mydogexample.viewmodel.MainActivityViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity(), androidx.appcompat.widget.SearchView.OnQueryTextListener {
+class MainActivity : AppCompatActivity() {
 
     private lateinit var imagesPuppies: List<String>
     private lateinit var dogsAdapter: DogsAdapter
@@ -27,15 +28,24 @@ class MainActivity : AppCompatActivity(), androidx.appcompat.widget.SearchView.O
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.searchBreed.setOnQueryTextListener(this)
+        setupBtnSearch()
+
     }
 
-    override fun onQueryTextSubmit(query: String): Boolean {
-        searchByName(query.lowercase())
-        if (query.isNotEmpty()) {
-            viewModel.setCharacterSearched(query)
-        }
-        return true
+    private fun setupBtnSearch() {
+        binding.searchBreed.setOnQueryTextListener(object : OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                searchByName(query!!.lowercase())
+                if (query.isNotEmpty()) {
+                    viewModel.setCharacterSearched(query)
+                }
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                return true
+            }
+        })
     }
 
     private fun searchByName(query: String) {
@@ -72,10 +82,6 @@ class MainActivity : AppCompatActivity(), androidx.appcompat.widget.SearchView.O
 
     private fun showErrorDialog() {
         Toast.makeText(this, "Ha ocurrido un error", Toast.LENGTH_SHORT).show()
-    }
-
-    override fun onQueryTextChange(newText: String?): Boolean {
-        return true
     }
 
     private fun hideKeyboard() {
