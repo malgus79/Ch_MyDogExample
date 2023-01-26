@@ -4,4 +4,6 @@
     <string name="error_ocurred">An error has occurred</string>
     <string name="no_images">"No images found for: "</string>
     <string name="choose_breed">Choose a dog breed</string>
+    <string name="share">Share</string>
+    <string name="favorites">favorites</string>
 </resources>

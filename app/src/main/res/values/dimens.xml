@@ -1,9 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="text_size_normal">20sp</dimen>
+    <!-- Dimens Margin -->
+    <dimen name="margin_min">8dp</dimen>
+    <dimen name="margin_default">16dp</dimen>
+    <dimen name="margin_middle">32dp</dimen>
+    <dimen name="margin_max">64dp</dimen>
+
+    <!-- Dimens Size -->
+    <dimen name="size_text_normal">20sp</dimen>
+
+    <!-- Dimens CornerRadius -->
+    <dimen name="radius_card_view">8dp</dimen>
+    <dimen name="radius_search_view">20dp</dimen>
+
+    <!-- Dimens Others -->
     <dimen name="error_image_size">50dp</dimen>
-    <dimen name="common_margin_default">16dp</dimen>
-    <dimen name="common_margin_max">64dp</dimen>
-    <dimen name="search_view_radius">20dp</dimen>
-    <dimen name="common_margin_min">8dp</dimen>
 </resources>
